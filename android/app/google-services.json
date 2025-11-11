@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "787087826417",
+    "project_id": "brsm-app",
+    "storage_bucket": "brsm-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787087826417:android:18500aa1a3b32e1e37b850",
+        "android_client_info": {
+          "package_name": "com.example.brsm_id"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAF3zVjbBs3h2X9f1uahLIZrSNPNQdLbM8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
