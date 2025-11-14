@@ -154,7 +154,14 @@ class _EventsPageState extends State<EventsPage> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  if (_user == null) return;
+                                  final eventTitle = item.title;
+                                  final eventId = item.title;
+                                  final userDoc = await _firestore
+                                      .collection('users')
+                                      .doc(_user!.uid)
+                                      .get();
+                                  final name =
+                                      userDoc.data()?['name'] ?? 'Пользователь';
 
                                   await _firestore
                                       .collection('users')
@@ -162,11 +169,32 @@ class _EventsPageState extends State<EventsPage> {
                                       .collection('my_events')
                                       .doc(item.title)
                                       .set({
-                                    'title': item.title,
-                                    'date': item.date,
-                                    'imageURL': item.imageURL,
-                                    'timestamp': FieldValue.serverTimestamp(),
-                                  });
+                                        'title': item.title,
+                                        'date': item.date,
+                                        'imageURL': item.imageURL,
+                                        'timestamp':
+                                            FieldValue.serverTimestamp(),
+                                      });
+
+                                  await _firestore
+                                      .collection('events')
+                                      .doc(eventId)
+                                      .collection('participants')
+                                      .doc(_user!.uid)
+                                      .set({
+                                        'uid': _user!.uid,
+                                        'name': name,
+                                        'email': _user!.email,
+                                        'timestamp':
+                                            FieldValue.serverTimestamp(),
+                                      });
+
+                                  await _firestore
+                                      .collection('events')
+                                      .doc(eventId)
+                                      .set({
+                                        'title': eventTitle,
+                                      }, SetOptions(merge: true));
 
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

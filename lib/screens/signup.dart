@@ -1,4 +1,5 @@
-
+import 'package:brsm_id/screens/screen_admina.dart';
+import 'package:brsm_id/service/vhodkakadmin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:AuthWrapper (),
+      home: AuthWrapper(),
       theme: ThemeData(),
     );
   }
@@ -59,7 +59,7 @@ class _SignUpPage extends State<SignUpPage> {
               children: [
                 Image.asset('assets/images/brsm.png', width: 120, height: 120),
                 const SizedBox(height: 40),
-      
+
                 const Text(
                   'Регистрация нового пользователя',
                   style: TextStyle(
@@ -69,7 +69,7 @@ class _SignUpPage extends State<SignUpPage> {
                   ),
                 ),
                 const SizedBox(height: 30),
-               
+
                 //  поле ввода email
                 TextField(
                   controller: emailcontroller,
@@ -80,21 +80,21 @@ class _SignUpPage extends State<SignUpPage> {
                   decoration: const InputDecoration(
                     labelText: 'Введите ваш email',
                     border: OutlineInputBorder(
-                       borderRadius: BorderRadius.all( Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     labelStyle: TextStyle(
                       fontFamily: 'montserrat',
                       fontWeight: FontWeight.w500,
                     ),
-                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all( Radius.circular(10)),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color: Color.fromARGB(255, 200, 200, 200),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all( Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color: Color.fromARGB(255, 116, 199, 130),
                         width: 1.5,
@@ -102,9 +102,9 @@ class _SignUpPage extends State<SignUpPage> {
                     ),
                   ),
                 ),
-      
+
                 const SizedBox(height: 20),
-      
+
                 //  поле ввода пароля
                 TextField(
                   controller: passwordcontroller,
@@ -116,21 +116,21 @@ class _SignUpPage extends State<SignUpPage> {
                   decoration: const InputDecoration(
                     labelText: 'Введите ваш пароль',
                     border: OutlineInputBorder(
-                       borderRadius: BorderRadius.all( Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                     ),
                     labelStyle: TextStyle(
                       fontFamily: 'montserrat',
                       fontWeight: FontWeight.w500,
                     ),
-                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all( Radius.circular(10)),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color: Color.fromARGB(255, 200, 200, 200),
                         width: 1.5,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.all( Radius.circular(10)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color: Color.fromARGB(255, 116, 199, 130),
                         width: 1.5,
@@ -138,103 +138,124 @@ class _SignUpPage extends State<SignUpPage> {
                     ),
                   ),
                 ),
-      
+
                 const SizedBox(height: 30),
 
                 GestureDetector(
-                   onTap: () {
-                     Navigator.push(
-                      context, 
-                     MaterialPageRoute(builder: (context) => ResetPassword()),
-                     );
-                   },
-                   
-                   child:  Text(
-                  'Нажмите, если вы забыли пароль',
-                  style: TextStyle(
-                    fontFamily: 'montserrat',
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                    decoration: TextDecoration.underline,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ResetPassword()),
+                    );
+                  },
+
+                  child: Text(
+                    'Нажмите, если вы забыли пароль',
+                    style: TextStyle(
+                      fontFamily: 'montserrat',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 15,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
-                )
                 ),
-               
-      
+
+                const SizedBox(height: 15),
+
+                
+
                 const SizedBox(height: 30),
 
                 Row(
-  mainAxisAlignment: MainAxisAlignment.center, 
-  children: [
-    ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 116, 199, 130),
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-        textStyle: const TextStyle(
-          fontSize: 13,
-          fontFamily: 'Montserrat=',
-        ),
-      ),
-      onPressed: () async {
-        bool success = await AuthService.registerWithEmail(
-          email: emailcontroller.text.trim(),
-          password: passwordcontroller.text.trim(),
-          context: context,
-        );
-        if (success == true) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => DataScreen()),
-          );
-        }
-      },
-      child: const Text(
-        'Зарегистрироваться',
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-    ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          116,
+                          199,
+                          130,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 15,
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 13,
+                          fontFamily: 'Montserrat',
+                        ),
+                      ),
+                      onPressed: () async {
+                        bool success = await AuthService.registerWithEmail(
+                          email: emailcontroller.text.trim(),
+                          password: passwordcontroller.text.trim(),
+                          context: context,
+                        );
+                        if (success == true) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DataScreen(),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Зарегистрироваться',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
 
-    const SizedBox(width: 20), 
+                    const SizedBox(width: 20),
 
-    ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: const Color.fromARGB(255, 116, 199, 130),
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-        textStyle: const TextStyle(
-          fontSize: 14,
-          fontFamily: 'Montserrat',
-        ),
-      ),
-      onPressed: () async {
-        String email = emailcontroller.text.trim();
-        String password = passwordcontroller.text.trim();
-        bool success = await vhod.AuthService().signInWithEmail(
-          email: email,
-          password:password,
-          context:context,
-        );
-        if (success) {
-          Navigator.push(
-            context,
-             MaterialPageRoute(builder: (context) => MainPage()),
-             );
-        }
-      },
-      child: const Text(
-        'Войти',
-        style: TextStyle(
-          fontFamily: 'Montserrat',
-          fontWeight: FontWeight.bold,
-          color: Color.fromARGB(255, 255, 255, 255),
-        ),
-      ),
-    ),
-  ],
-)
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          116,
+                          199,
+                          130,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 15,
+                        ),
+                        textStyle: const TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Montserrat',
+                        ),
+                      ),
+                      onPressed: () async {
+                        String email = emailcontroller.text.trim();
+                        String password = passwordcontroller.text.trim();
+                        bool success = await vhod.AuthService().signInWithEmail(
+                          email: email,
+                          password: password,
+                          context: context,
+                        );
+                        if (success) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MainPage()),
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Войти',
+                        style: TextStyle(
+                          fontFamily: 'Montserrat',
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 255, 255, 255),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -257,4 +278,3 @@ class AuthWrapper extends StatelessWidget {
     }
   }
 }
-

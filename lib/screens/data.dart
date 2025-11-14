@@ -189,6 +189,7 @@ class DataScreen extends StatelessWidget {
                         name: nameController.text.trim(),
                         lastname: lastnameController.text.trim(),
                         fathername: fathernameController.text.trim(),
+                        roles: 'user',
                       );
                       Navigator.push(context, 
                       MaterialPageRoute(builder: ( context) => MainPage() ),

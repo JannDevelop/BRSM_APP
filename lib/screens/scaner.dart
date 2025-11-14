@@ -21,7 +21,7 @@ class _QrScanPageState extends State<QrScanPage> {
     setState(() => _isProcessing = true);
 
     try {
-      debugPrint('✅ RAW QR VALUE: $rawValue');
+      debugPrint(' RAW QR VALUE: $rawValue');
 
       final Map<String, dynamic> qrData = jsonDecode(rawValue);
       final String eventId = qrData['eventId'] ?? '';
@@ -71,7 +71,7 @@ class _QrScanPageState extends State<QrScanPage> {
         SnackBar(content: Text('Added $points points!')),
       );
 
-      debugPrint('✅ SUCCESS: $points points added for event $eventId');
+      debugPrint(' SUCCESS: $points points added for event $eventId');
     } catch (e, stack) {
       debugPrint('❌ Scanner ERROR: $e');
       debugPrint(stack.toString());
@@ -97,7 +97,7 @@ class _QrScanPageState extends State<QrScanPage> {
           if (rawValue != null) {
             _handleBarcode(rawValue);
           } else {
-            debugPrint('⚠️ QR code has no data');
+            debugPrint(' QR code has no data');
           }
         },
       ),

@@ -9,12 +9,15 @@ class UserData {
   String name;
   String lastname;
   String fathername;
+  List<String> roles;
 
   UserData({
     required this.nomer,
     required this.name,
     required this.lastname,
     required this.fathername,
+    required this.roles,
+
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +26,7 @@ class UserData {
       'name': name,
       'lastname': lastname,
       'fathername': fathername,
+      'roles': roles,
     };
   }
 }
@@ -33,6 +37,7 @@ Future<void> saveUserData({
   required String name,
   required String lastname,
   required String fathername,
+  required String roles,
 }) async {
   User? firebaseUser = FirebaseAuth.instance.currentUser;
 
@@ -42,6 +47,7 @@ Future<void> saveUserData({
       name: name,
       lastname: lastname,
       fathername: fathername,
+      roles: ['user'],
     );
 
     await FirebaseFirestore.instance

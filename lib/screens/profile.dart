@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'package:brsm_id/screens/myachievements.dart';
 import 'package:brsm_id/screens/myevents.dart';
+import 'package:brsm_id/service/vhodkakadmin.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:brsm_id/service/pickimage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:brsm_id/screens/moipokypki.dart';
+import 'package:brsm_id/screens/screen_admina.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -23,10 +25,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _loadAvatarPath(); 
+    _loadAvatarPath();
     fetchUserData();
   }
-   Future<void> fetchUserData() async {
+
+  Future<void> fetchUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return;
 
@@ -42,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     }
   }
-  
+
   Future<void> _loadAvatarPath() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -55,11 +58,10 @@ class _ProfilePageState extends State<ProfilePage> {
     await prefs.setString('avatarPath', path);
   }
 
-
   Future<void> _updateAvatar() async {
     final path = await pickAndSaveAvatar();
     if (path != null) {
-      await _saveAvatarPath(path); 
+      await _saveAvatarPath(path);
       setState(() {
         _avatarPath = path;
       });
@@ -67,53 +69,51 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildInfoCard(
-  String title,
-  String value, {
-  VoidCallback? onTap,      
-  IconData? icon,           
-}) {
-  return InkWell(
-    onTap: onTap,
-    borderRadius: BorderRadius.circular(15),
-    child: Card(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-        child: Row(
-          children: [
-            
-            Text(
-              '$title ',
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, fontFamily: 'montserrat'),
-            ),
-            Expanded(
-              child: Text(
-                value,
+    String title,
+    String value, {
+    VoidCallback? onTap,
+    IconData? icon,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(15),
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 8),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          child: Row(
+            children: [
+              Text(
+                '$title ',
                 style: const TextStyle(
-                    fontSize: 16, fontFamily: 'montserrat', fontWeight: FontWeight.bold),
-                textAlign: TextAlign.start,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'montserrat',
+                ),
               ),
-            ),
-            if (icon != null) ...[
-              
-              Icon(icon, size: 24, color: Colors.green),
-              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'montserrat',
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.start,
+                ),
+              ),
+              if (icon != null) ...[
+                Icon(icon, size: 24, color: Colors.green),
+                const SizedBox(width: 10),
+              ],
             ],
-          ],
+          ),
         ),
       ),
-    ),
-  );
-}
-
-
- 
-
-
-
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border.all(width: 2, color: Colors.white),
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: const Icon(Icons.edit, size: 20, color: Colors.white),
+                          child: const Icon(
+                            Icons.edit,
+                            size: 20,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -172,75 +176,160 @@ class _ProfilePageState extends State<ProfilePage> {
                     Text(
                       userData?['name'] ?? '',
                       style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'montserrat'),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'montserrat',
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       userData?['lastname'] ?? '',
                       style: const TextStyle(
-                          fontSize: 22, fontWeight: FontWeight.bold, fontFamily: 'montserrat'),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'montserrat',
+                      ),
                     ),
-                    
                   ],
                 ),
 
                 const SizedBox(height: 5),
 
-                 Text(
-                     ('Баллы: ${userData?['points'].toString() ?? ''}'),
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold, fontFamily: 'montserrat'),
-                    ),
+                Text(
+                  ('Баллы: ${userData?['points'].toString() ?? ''}'),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'montserrat',
+                  ),
+                ),
 
                 const SizedBox(height: 20),
 
                 if (userData?['nomer'] != null)
                   _buildInfoCard('Номер', userData!['nomer'].toString()),
 
-               
-
                 _buildInfoCard(
                   "Мои покупки",
                   "",
                   icon: Icons.chevron_right,
-                   onTap: () {
-                   Navigator.push(context, MaterialPageRoute(builder: (_) => Moipokypki()));
-                    },
-                    ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => Moipokypki()),
+                    );
+                  },
+                ),
 
-                     _buildInfoCard(
+                _buildInfoCard(
                   "Мои достижения",
                   "",
                   icon: Icons.chevron_right,
-                   onTap: () {
-                   Navigator.push(context, MaterialPageRoute(builder: (_) => Myachievements()));
-                    },
-                    ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => Myachievements()),
+                    );
+                  },
+                ),
 
-                     _buildInfoCard(
+                _buildInfoCard(
                   "Мои события",
                   "",
                   icon: Icons.chevron_right,
-                   onTap: () {
-                   Navigator.push(context, MaterialPageRoute(builder: (_) => MyEventsPage()));
-                    },
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => MyEventsPage()),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceEvenly, 
+                  children: [
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        FirebaseAuth.instance.signOut();
+                      },
+                      icon: const Icon(Icons.logout, color: Colors.white),
+                      label: const Text(
+                        'Выйти',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'montserrat',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          116,
+                          199,
+                          130,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 30,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
                     ),
 
-                     const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () async {
+                        bool admin = await isAdmin();
 
-                    
-                ElevatedButton.icon(
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                  },
-                  icon: const Icon(Icons.logout, color: Color.fromARGB(255, 255, 255, 255),),
-                  label: const Text('Выйти', style: TextStyle(color: Color.fromARGB(255, 255, 255, 255),fontFamily: 'montserrat', fontWeight: FontWeight.bold), ),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor:const Color.fromARGB(255, 116, 199, 130),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20))),
+                        if (admin) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => AdminPage(eventId: '',)),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'У вас нет доступа к админской панели',
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.admin_panel_settings,
+                        color: Colors.white,
+                      ),
+                      label: const Text(
+                        'Админка',
+                        style: TextStyle(
+                          fontFamily: 'montserrat',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                          color: Colors.white,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          116,
+                          199,
+                          130,
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
 
                 const SizedBox(height: 30),
