@@ -1,5 +1,3 @@
-import 'package:brsm_id/screens/screen_admina.dart';
-import 'package:brsm_id/service/vhodkakadmin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -104,8 +102,7 @@ class _SignUpPage extends State<SignUpPage> {
                 ),
 
                 const SizedBox(height: 20),
-
-                //  поле ввода пароля
+                
                 TextField(
                   controller: passwordcontroller,
                   cursorColor: Color.fromARGB(255, 114, 114, 114),

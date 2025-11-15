@@ -154,6 +154,7 @@ class _EventsPageState extends State<EventsPage> {
                                   ),
                                 ),
                                 onPressed: () async {
+                                  
                                   final eventTitle = item.title;
                                   final eventId = item.title;
                                   final userDoc = await _firestore
@@ -176,6 +177,8 @@ class _EventsPageState extends State<EventsPage> {
                                             FieldValue.serverTimestamp(),
                                       });
 
+                                  var lastname =
+                                      userDoc.data()?['lastname'] ?? '';
                                   await _firestore
                                       .collection('events')
                                       .doc(eventId)
@@ -184,6 +187,7 @@ class _EventsPageState extends State<EventsPage> {
                                       .set({
                                         'uid': _user!.uid,
                                         'name': name,
+                                        'lastname' : lastname,
                                         'email': _user!.email,
                                         'timestamp':
                                             FieldValue.serverTimestamp(),

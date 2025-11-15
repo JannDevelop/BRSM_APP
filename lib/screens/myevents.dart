@@ -35,7 +35,7 @@ class MyEventsPage extends StatelessWidget {
 
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator(color:  Color.fromARGB(255, 116, 199, 130),));
           }
 
           final events = snapshot.data!.docs;

@@ -1,3 +1,4 @@
+import 'package:brsm_id/screens/qr_admina.dart';
 import 'package:brsm_id/screens/spiski.dart';
 import 'package:flutter/material.dart';
 
@@ -41,11 +42,7 @@ class AdminPage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (context) => spisokPage(
-                      
-                    ), // <-- передаем eventId
-                  ),
+                  MaterialPageRoute(builder: (context) => spisokPage()),
                 );
               },
               child: const Text('Смотреть списки участников'),
@@ -65,8 +62,13 @@ class AdminPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              onPressed: () {},
-              child: const Text('Создать QR код мероприятий'),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const QrAdmina ()),
+                );
+              },
+              child: const Text('Создать QR код мероприятия'),
             ),
           ],
         ),

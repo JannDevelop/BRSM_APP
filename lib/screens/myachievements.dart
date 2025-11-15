@@ -29,7 +29,9 @@ class Myachievements extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color:  Color.fromARGB(255, 116, 199, 130),
+              ),
             );
           }
 
@@ -43,13 +45,11 @@ class Myachievements extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: achievements.length,
             itemBuilder: (context, index) {
-              final data =
-                  achievements[index].data() as Map<String, dynamic>;
+              final data = achievements[index].data() as Map<String, dynamic>;
 
               final title = data['title'] ?? "Без названия";
               final description = data['description'] ?? "";
-              final icon = data['icon'] ??
-                  "";
+              final icon = data['icon'] ?? "";
 
               return Container(
                 margin: const EdgeInsets.only(bottom: 16),
