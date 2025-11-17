@@ -13,7 +13,6 @@ class _ShopPageState extends State<ShopPage> {
   final _firestore = FirebaseFirestore.instance;
   final _user = FirebaseAuth.instance.currentUser;
 
-  // Проверяем, получал ли пользователь награду ранее
   Future<bool> _hasReceivedBefore(String rewardId) async {
     if (_user == null) return false;
 

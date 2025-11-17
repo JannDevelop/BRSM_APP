@@ -154,7 +154,6 @@ class _EventsPageState extends State<EventsPage> {
                                   ),
                                 ),
                                 onPressed: () async {
-                                  
                                   final eventTitle = item.title;
                                   final eventId = item.title;
                                   final userDoc = await _firestore
@@ -187,8 +186,20 @@ class _EventsPageState extends State<EventsPage> {
                                       .set({
                                         'uid': _user!.uid,
                                         'name': name,
-                                        'lastname' : lastname,
+                                        'lastname': lastname,
                                         'email': _user!.email,
+                                        'timestamp':
+                                            FieldValue.serverTimestamp(),
+                                      });
+
+                                  await _firestore
+                                      .collection('events')
+                                      .doc(eventId)
+                                      .collection('messages')
+                                      .add({
+                                        'userId': _user!.uid,
+                                        'userName': name,
+                                        'text': "Присоединился к событию",
                                         'timestamp':
                                             FieldValue.serverTimestamp(),
                                       });

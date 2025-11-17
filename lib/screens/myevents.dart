@@ -1,3 +1,4 @@
+import 'package:brsm_id/screens/event_discussion.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,7 @@ class MyEventsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
           'Мои события',
@@ -35,7 +36,11 @@ class MyEventsPage extends StatelessWidget {
 
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator(color:  Color.fromARGB(255, 116, 199, 130),));
+            return Center(
+              child: CircularProgressIndicator(
+                color: Color.fromARGB(255, 116, 199, 130),
+              ),
+            );
           }
 
           final events = snapshot.data!.docs;
@@ -48,7 +53,8 @@ class MyEventsPage extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: events.length,
             itemBuilder: (context, index) {
-              final e = events[index].data();
+              final event = events[index]; 
+              final e = event.data() as Map<String, dynamic>; 
 
               return Card(
                 shape: RoundedRectangleBorder(
@@ -75,12 +81,55 @@ class MyEventsPage extends StatelessWidget {
                       SizedBox(height: 12),
                       Text(
                         e['title'] ?? '',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       SizedBox(height: 6),
                       Text(
                         e['date'] ?? '',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                      SizedBox(height: 6),
+
+                      Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              116,
+                              199,
+                              130,
+                            ),
+
+                            textStyle: const TextStyle(
+                              fontSize: 13,
+                              fontFamily: 'Montserrat',
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ChatPage(
+                                  eventId: event.id,
+                                  userId: _user!.uid,
+                                  userName: _user!.displayName ?? "User",
+                                ),
+                              ),
+                            );
+                          },
+
+                          child: Text(
+                            'Перейти к обсуждению',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
